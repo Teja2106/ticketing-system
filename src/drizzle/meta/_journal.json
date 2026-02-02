@@ -8,6 +8,13 @@
       "when": 1769934407157,
       "tag": "0000_nifty_taskmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770018969198,
+      "tag": "0001_complete_loa",
+      "breakpoints": true
     }
   ]
 }

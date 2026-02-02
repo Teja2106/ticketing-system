@@ -23,6 +23,7 @@ async function ensureAdmin() {
         
         await db.insert(Users).values({
             id: uuid,
+            fullName: 'Admin',
             email: adminEmail,
             password: hashedPassword,
             isAdmin: true

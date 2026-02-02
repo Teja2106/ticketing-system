@@ -1,6 +1,8 @@
 import { getUser } from "@/auth/dal";
 import { UserProvider } from "./context";
 import React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "./app-sidebar";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
     const user = await getUser();
@@ -8,7 +10,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
     return (
         <>
             <UserProvider value={user}>
-                { children }
+                <SidebarProvider>
+                    <AppSidebar />
+                        {children}
+                </SidebarProvider>
             </UserProvider>
         </>
     )

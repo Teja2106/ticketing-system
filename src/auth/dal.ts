@@ -27,6 +27,7 @@ export const getUser = cache(async () => {
 function userDTO(user: typeof Users.$inferSelect) {
     return {
         id: user.id,
+        fullName: user.fullName,
         email: user.email,
         isAdmin: user.isAdmin ?? false
     }

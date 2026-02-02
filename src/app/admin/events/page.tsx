@@ -1,8 +1,8 @@
-export default function AdminAccount() {
+export default function AdminEvents() {
     return (
         <>
             <div className="h-screen flex items-center justify-center">
-                <p>Hello world</p>
+                Admin Events Page
             </div>
         </>
     )

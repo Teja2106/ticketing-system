@@ -4,6 +4,7 @@ import React, { createContext, useContext } from "react";
 
 type User = {
     id: string;
+    fullName: string;
     email: string;
     isAdmin: boolean;
 } | null;
