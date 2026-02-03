@@ -1,6 +1,6 @@
 'use client';
 
-import { login } from "@/auth/actions";
+import { adminLogin } from "@/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useActionState } from "react";
 
 export default function AdminLogin() {
-    const [state, action, pending] = useActionState(login, undefined);
+    const [state, action, pending] = useActionState(adminLogin, undefined);
     return (
         <>
             <div className="h-screen flex items-center justify-center">

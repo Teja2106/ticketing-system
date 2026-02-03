@@ -1,13 +1,15 @@
 'use server';
 
-import { FormState, LoginSchema } from "./formSchema";
-import { createSession, deleteSession } from "./session";
-import { Users } from "@/db/schema";
+import { AddStaffFormState, AddStaffSchema, LoginFormState, LoginSchema } from "./formSchema";
+import { createSession, deleteSession, verifySession } from "./session";
+import { Admin, Staff } from "@/db/schema";
 import { db } from "@/db";
 import bcrypt from 'bcrypt';
 import { redirect } from "next/navigation";
+import { uuidv7 } from 'uuidv7';
+import { eq } from "drizzle-orm";
 
-export async function login(state: FormState, formData: FormData) {
+export async function adminLogin(state: LoginFormState, formData: FormData) {
     const validateFields = LoginSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password')
@@ -20,21 +22,71 @@ export async function login(state: FormState, formData: FormData) {
     }
 
     const { email, password } = validateFields.data;
-    const user = await db.select().from(Users);
+    const admin = await db.select().from(Admin).where(eq(Admin.email, email));
 
-    if (email !== user[0].email || !(await bcrypt.compare(password, user[0].password))) {
+    if (email !== admin[0].email || !(await bcrypt.compare(password, admin[0].password))) {
         return {
             message: 'Invalid Credentials'
         }
     }
 
-    await createSession(user[0].id);
+    await createSession(admin[0].id);
     
-    if (user[0].isAdmin) {
-        redirect('/admin/dashboard');
-    } else {
-        redirect('/dashboard')
+    redirect('/admin/dashboard');
+}
+
+export async function staffLogin(state: LoginFormState, formData: FormData) {
+    const validateFields = LoginSchema.safeParse({
+        email: formData.get('email'),
+        password: formData.get('password')
+    });
+
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
     }
+
+    const { email, password } = validateFields.data;
+    const staff = await db.select().from(Staff).where(eq(Staff.email, email));
+
+    if (email !== staff[0].email || !(await bcrypt.compare(password, staff[0].password))) {
+        return {
+            message: 'Invalid Credentials'
+        }
+    }
+
+    await createSession(staff[0].id);
+    redirect('/staff/dashboard');
+}
+
+export async function addStaffForm(state: AddStaffFormState, formData: FormData) {
+    const session = await verifySession();
+
+    const validateFields = AddStaffSchema.safeParse({
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+        password: formData.get('password')
+    });
+
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
+    }
+
+    const { fullName, email, password } = validateFields.data;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await db.insert(Staff).values({
+        id: uuidv7(),
+        createdBy: session.userId,
+        fullName: fullName,
+        email: email,
+        password: hashedPassword,
+    });
+
 }
 
 export async function logout() {

@@ -15,6 +15,27 @@
       "when": 1770018969198,
       "tag": "0001_complete_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770118913527,
+      "tag": "0002_slow_the_fallen",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770119318905,
+      "tag": "0003_unknown_killmonger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770119520038,
+      "tag": "0004_complete_purple_man",
+      "breakpoints": true
     }
   ]
 }

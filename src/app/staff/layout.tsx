@@ -1,11 +1,11 @@
-import { getAdmin } from "@/auth/dal";
+import { getStaff } from "@/auth/dal";
 import { UserProvider } from "./context";
 import React from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-    const user = await getAdmin();
+    const user = await getStaff();
 
     return (
         <>

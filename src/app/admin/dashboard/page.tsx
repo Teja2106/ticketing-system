@@ -1,5 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import TicketCounter from "@/components/custom/ticket-counter";
+import AddSatff from "@/components/custom/staff-management";
 
 export default function AdminDashboard() {
     return (
@@ -10,10 +12,21 @@ export default function AdminDashboard() {
                 </div>
                 <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-5" />
                 <div>
-                    <p className="font-semibold text-xl">Dashboard</p>
+                    <p className="font-semibold text-xl">Dashboard Overview</p>
                 </div>
             </div>
+
             <Separator />
+
+            <div className="flex justify-around items-center mt-3 gap-6">
+                <TicketCounter />
+
+            </div>
+
+            <div className="">
+                <AddSatff />
+            </div>
+
         </>
     )
 }

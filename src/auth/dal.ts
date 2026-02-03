@@ -1,34 +1,53 @@
 import { cache } from "react";
 import { verifySession } from "./session";
 import { db } from "@/db";
-import { Users } from "@/db/schema";
+import { Admin, Staff } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export const getUser = cache(async () => {
+export const getAdmin = cache(async () => {
     const session = await verifySession();
 
     if (!session) return null;
 
-    const fetchedUser = await db
+    const fetchedAdmin = await db
         .select()
-        .from(Users)
-        .where(eq(Users.id, session.userId));
+        .from(Admin)
+        .where(eq(Admin.id, session.userId));
         
     try {
-        if (fetchedUser.length === 0) return null;
+        if (fetchedAdmin.length === 0) return null;
 
-        return userDTO(fetchedUser[0]);
+        return userDTO(fetchedAdmin[0]);
     } catch {
-        console.log('Failed to fetch user.');
+        console.log('Failed to fetch admin.');
         return null;
     }
 });
 
-function userDTO(user: typeof Users.$inferSelect) {
+export const getStaff = cache(async () => {
+    const session = await verifySession();
+
+    if (!session) return null;
+
+    const fetchedStaff = await db
+        .select()
+        .from(Staff)
+        .where(eq(Staff.id, session.userId));
+
+    try {
+        if (fetchedStaff.length === 0) return null;
+
+        return userDTO(fetchedStaff[0]);
+    } catch {
+        console.log('Failed to fetch staff.');
+        return null;
+    }
+});
+
+function userDTO(user: typeof Admin.$inferSelect) {
     return {
         id: user.id,
         fullName: user.fullName,
         email: user.email,
-        isAdmin: user.isAdmin ?? false
     }
 }
