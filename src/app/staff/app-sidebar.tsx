@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader } from "@/components/ui/sidebar";
-import { CalendarClockIcon, LayoutDashboardIcon, LogOutIcon, MoreVerticalIcon, Ticket, UserCircle2Icon } from "lucide-react";
+import { LayoutDashboardIcon, LogOutIcon, MoreVerticalIcon, ScanQrCodeIcon, Ticket, UserCircle2Icon } from "lucide-react";
 import { useUser } from "./context";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,6 @@ function SidebarItem({ href, icon: Icon, label }: { href: string; icon: LucideIc
 
 export function AppSidebar() {
     const user = useUser();
-    console.log(user);
 
     return (
         <Sidebar variant="floating">
@@ -45,8 +44,8 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarItem href="/admin/dashboard" icon={LayoutDashboardIcon} label="Dashboard" />
-                    <SidebarItem href="/admin/events" icon={CalendarClockIcon} label="Events" />
+                    <SidebarItem href="/staff/dashboard" icon={LayoutDashboardIcon} label="Dashboard" />
+                    <SidebarItem href="/staff/events" icon={ScanQrCodeIcon} label="Scanner" />
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>

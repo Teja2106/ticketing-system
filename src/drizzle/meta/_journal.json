@@ -36,6 +36,13 @@
       "when": 1770119520038,
       "tag": "0004_complete_purple_man",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1770146188523,
+      "tag": "0005_friendly_skin",
+      "breakpoints": true
     }
   ]
 }

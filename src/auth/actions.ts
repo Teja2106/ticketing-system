@@ -30,7 +30,7 @@ export async function adminLogin(state: LoginFormState, formData: FormData) {
         }
     }
 
-    await createSession(admin[0].id);
+    await createSession(admin[0].id, 'admin');
     
     redirect('/admin/dashboard');
 }
@@ -56,7 +56,7 @@ export async function staffLogin(state: LoginFormState, formData: FormData) {
         }
     }
 
-    await createSession(staff[0].id);
+    await createSession(staff[0].id, 'staff');
     redirect('/staff/dashboard');
 }
 
@@ -65,6 +65,7 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
 
     const validateFields = AddStaffSchema.safeParse({
         fullName: formData.get('fullName'),
+        role: formData.get('role'),
         email: formData.get('email'),
         password: formData.get('password')
     });
@@ -75,7 +76,7 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
         }
     }
 
-    const { fullName, email, password } = validateFields.data;
+    const { fullName, role, email, password } = validateFields.data;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -83,6 +84,7 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
         id: uuidv7(),
         createdBy: session.userId,
         fullName: fullName,
+        role: role,
         email: email,
         password: hashedPassword,
     });

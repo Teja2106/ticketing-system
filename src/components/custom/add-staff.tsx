@@ -24,13 +24,16 @@ export default function AddStaff() {
                     </DialogHeader>
 
                     <form className="space-y-4" action={action}>
-                        {/* <div className="flex justify-center text-red-500 mb-3">
-                            
-                        </div> */}
                         <div>
                             <Label className="mb-2 ml-1.5">Full Name</Label>
                             <Input type="text" name="fullName" />
                             { state?.errors.fullName && (<p className="ml-1.5 text-red-500">{ state.errors.fullName }</p>) }
+                        </div>
+
+                        <div>
+                            <Label className="mb-2 ml-1.5">Role</Label>
+                            <Input type="text" name="role" />
+                            { state?.errors.role && (<p className="ml-1.5 text-red-500">{ state.errors.role }</p>) }
                         </div>
 
                         <div>
