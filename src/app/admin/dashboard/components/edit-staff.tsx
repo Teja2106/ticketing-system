@@ -7,13 +7,7 @@ import { useActionState } from "react";
 import { updateStaffForm } from "@/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-
-type StaffType = {
-    id: string;
-    fullName: string;
-    role: string;
-    email: string;
-}
+import { StaffType } from "@/auth/formSchema";
 
 export default function EditStaff({ staff }: { staff: StaffType }) {
     const [state, action, pending] = useActionState(updateStaffForm, undefined);

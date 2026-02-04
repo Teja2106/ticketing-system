@@ -1,8 +1,8 @@
 import { db } from "@/db";
 import { Staff } from "@/db/schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../../components/ui/table";
-import { Button } from "../../../../components/ui/button";
 import EditStaff from "./edit-staff";
+import DeleteStaff from "./delete-staff";
 
 export default async function StaffList() {
     const staff = await db.select().from(Staff);
@@ -40,7 +40,7 @@ export default async function StaffList() {
 
                                 <TableCell className="text-right space-x-2">
                                     <EditStaff staff={s} />
-                                    <Button variant={'destructive'} size={'sm'} className="cursor-pointer">Delete</Button>
+                                    <DeleteStaff staff={s} />
                                 </TableCell>
                             </TableRow>
                         ))}

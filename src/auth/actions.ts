@@ -61,6 +61,10 @@ export async function staffLogin(state: LoginFormState, formData: FormData) {
     redirect('/staff/dashboard');
 }
 
+export async function logout() {
+    await deleteSession();
+}
+
 export async function addStaffForm(state: AddStaffFormState, formData: FormData) {
     const session = await verifySession();
 
@@ -123,6 +127,12 @@ export async function updateStaffForm(state: UpdateStaffFormState, formData: For
     revalidatePath('/admin/dashboard');
 }
 
-export async function logout() {
-    await deleteSession();
+export async function deleteStaff(formData: FormData) {
+    const id = formData.get('id') as string;
+
+    if (!id) return;
+
+    await db.delete(Staff).where(eq(Staff.id, id));
+
+    revalidatePath('/admin/dashboard');
 }

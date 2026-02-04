@@ -37,6 +37,13 @@ export type SessionPayload = {
     expiresAt: Date;
 };
 
+export type StaffType = {
+    id: string;
+    fullName: string;
+    role: string;
+    email: string;
+}
+
 export const LoginSchema = z.object({
     email: z.email({ message: 'Invalid email address.' }).trim(),
     password: z.string().min(1, { message: 'Password is mandatory field' }).max(16, { message: 'Exceeded the maximum character limit.' }).trim()
