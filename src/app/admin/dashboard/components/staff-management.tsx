@@ -1,5 +1,5 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Separator } from "../ui/separator";
+import { Card, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Separator } from "../../../../components/ui/separator";
 import AddStaff from "./add-staff";
 import StaffList from "./staff-list";
 

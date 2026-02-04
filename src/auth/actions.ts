@@ -1,6 +1,6 @@
 'use server';
 
-import { AddStaffFormState, AddStaffSchema, LoginFormState, LoginSchema } from "./formSchema";
+import { AddStaffFormState, AddStaffSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
 import { createSession, deleteSession, verifySession } from "./session";
 import { Admin, Staff } from "@/db/schema";
 import { db } from "@/db";
@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import { redirect } from "next/navigation";
 import { uuidv7 } from 'uuidv7';
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function adminLogin(state: LoginFormState, formData: FormData) {
     const validateFields = LoginSchema.safeParse({
@@ -72,7 +73,7 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
 
     if (!validateFields.success) {
         return {
-            errors: validateFields.error.flatten().fieldErrors
+            errors: validateFields.error.flatten().fieldErrors,
         }
     }
 
@@ -88,7 +89,38 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
         email: email,
         password: hashedPassword,
     });
+}
 
+export async function updateStaffForm(state: UpdateStaffFormState, formData: FormData) {
+    const id = formData.get('id') as string;
+
+    const validateFields = UpdateStaffSchema.safeParse({
+        fullName: formData.get('fullName') || undefined,
+        role: formData.get('role') || undefined,
+        email: formData.get('email') || undefined
+    });
+
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
+    }
+
+    const data = validateFields.data;
+
+    const updateData = Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Object.entries(data).filter(([_, v]) => v !== undefined)
+    );
+
+    if (Object.keys(updateData).length === 0) return;
+
+    await db
+        .update(Staff)
+        .set(updateData)
+        .where(eq(Staff.id, id));
+
+    revalidatePath('/admin/dashboard');
 }
 
 export async function logout() {

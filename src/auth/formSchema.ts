@@ -18,7 +18,16 @@ export type AddStaffFormState =
             email?: string[];
             password?: string[];
         };
-        message?: string;
+    }
+    | undefined;
+
+export type UpdateStaffFormState =
+    | {
+        errors?: {
+            fullName?: string[];
+            role?: string[];
+            email?: string[];
+        };
     }
     | undefined;
 
@@ -38,4 +47,10 @@ export const AddStaffSchema = z.object({
     role: z.string().min(1, { message: 'Role is mandatory field.' }).max(20, { message: 'Exceeded the maximum character limit.' }).trim(),
     email: z.email({ message: 'Invalid email address.' }).trim(),
     password: z.string().min(1, { message: 'Password is mandatory field.' }).max(16, { message: 'Exceeded the maximum character limit.' }).trim()
+});
+
+export const UpdateStaffSchema = z.object({
+    fullName: z.string().trim().optional(),
+    role: z.string().trim().optional(),
+    email: z.email({ message: 'Invalid email address.' }).trim().optional(),
 });

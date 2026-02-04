@@ -16,7 +16,7 @@ export default function AdminLogin() {
             <div className="h-screen flex items-center justify-center">
                 <Card className="w-full max-w-lg">
                     <CardHeader>
-                        <CardTitle>Login into Dashboard</CardTitle>
+                        <CardTitle>Admin Login</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form action={action}>
