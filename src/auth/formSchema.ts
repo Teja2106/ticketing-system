@@ -49,7 +49,7 @@ export const LoginSchema = z.object({
     password: z.string().min(1, { message: 'Password is mandatory field' }).max(16, { message: 'Exceeded the maximum character limit.' }).trim()
 });
 
-export const AddStaffSchema = z.object({
+export const CreateStaffSchema = z.object({
     fullName: z.string().min(1, { message: 'Name is mandatory field.' }).max(20, { message: 'Exceeded the maximum character limit.' }).trim(),
     role: z.string().min(1, { message: 'Role is mandatory field.' }).max(20, { message: 'Exceeded the maximum character limit.' }).trim(),
     email: z.email({ message: 'Invalid email address.' }).trim(),

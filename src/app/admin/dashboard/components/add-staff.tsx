@@ -6,11 +6,11 @@ import { Button } from "../../../../components/ui/button";
 import { Label } from "../../../../components/ui/label";
 import { Input } from "../../../../components/ui/input";
 import { useActionState } from "react";
-import { addStaffForm } from "@/auth/actions";
+import { createStaffForm } from "@/auth/actions";
 import { Spinner } from "../../../../components/ui/spinner";
 
 export default function AddStaff() {
-    const [state, action, pending] = useActionState(addStaffForm, undefined);
+    const [state, action, pending] = useActionState(createStaffForm, undefined);
 
     return (
         <>

@@ -1,6 +1,6 @@
 'use server';
 
-import { AddStaffFormState, AddStaffSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
+import { AddStaffFormState, CreateStaffSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
 import { createSession, deleteSession, verifySession } from "./session";
 import { Admin, Staff } from "@/db/schema";
 import { db } from "@/db";
@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { uuidv7 } from 'uuidv7';
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { sendMail } from "@/lib/mails";
 
 export async function adminLogin(state: LoginFormState, formData: FormData) {
     const validateFields = LoginSchema.safeParse({
@@ -65,10 +66,10 @@ export async function logout() {
     await deleteSession();
 }
 
-export async function addStaffForm(state: AddStaffFormState, formData: FormData) {
+export async function createStaffForm(state: AddStaffFormState, formData: FormData) {
     const session = await verifySession();
 
-    const validateFields = AddStaffSchema.safeParse({
+    const validateFields = CreateStaffSchema.safeParse({
         fullName: formData.get('fullName'),
         role: formData.get('role'),
         email: formData.get('email'),
@@ -93,6 +94,8 @@ export async function addStaffForm(state: AddStaffFormState, formData: FormData)
         email: email,
         password: hashedPassword,
     });
+
+    await sendMail(email, { name: fullName, email: email });
 }
 
 export async function updateStaffForm(state: UpdateStaffFormState, formData: FormData) {
