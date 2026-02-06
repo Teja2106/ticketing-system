@@ -22,7 +22,7 @@ export default async function StaffList() {
                     <TableHeader>
                         <TableRow className="border-b hover:bg-transparent">
                             <TableHead>Staff Name</TableHead>
-                            <TableHead>Role</TableHead>
+                            <TableHead>Assigned Location</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>

@@ -43,6 +43,13 @@
       "when": 1770146188523,
       "tag": "0005_friendly_skin",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1770394644323,
+      "tag": "0006_soft_jasper_sitwell",
+      "breakpoints": true
     }
   ]
 }

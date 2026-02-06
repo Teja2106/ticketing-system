@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendMail(to: string, variables: Record<string, string>) {
-    const filePath = path.join(process.cwd(), 'emails', 'staff-onboarding.html');
+    const filePath = path.join(process.cwd(), 'src', 'lib', 'emails', 'staff-onboarding.html');
     let html = await fs.readFile(filePath, 'utf-8');
 
     for (const [key, value] of Object.entries(variables)) {

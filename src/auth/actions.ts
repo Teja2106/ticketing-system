@@ -1,8 +1,8 @@
 'use server';
 
-import { AddStaffFormState, CreateStaffSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
+import { AddStaffFormState, AddStaffSchema, CreateEventFormState, CreateEventSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
 import { createSession, deleteSession, verifySession } from "./session";
-import { Admin, Staff } from "@/db/schema";
+import { Admin, Staff, Event } from "@/db/schema";
 import { db } from "@/db";
 import bcrypt from 'bcrypt';
 import { redirect } from "next/navigation";
@@ -66,10 +66,10 @@ export async function logout() {
     await deleteSession();
 }
 
-export async function createStaffForm(state: AddStaffFormState, formData: FormData) {
+export async function addStaffForm(state: AddStaffFormState, formData: FormData) {
     const session = await verifySession();
 
-    const validateFields = CreateStaffSchema.safeParse({
+    const validateFields = AddStaffSchema.safeParse({
         fullName: formData.get('fullName'),
         role: formData.get('role'),
         email: formData.get('email'),
@@ -96,6 +96,8 @@ export async function createStaffForm(state: AddStaffFormState, formData: FormDa
     });
 
     await sendMail(email, { name: fullName, email: email });
+    revalidatePath('/admin/dashboard');
+    return { success: true }
 }
 
 export async function updateStaffForm(state: UpdateStaffFormState, formData: FormData) {
@@ -138,4 +140,38 @@ export async function deleteStaff(formData: FormData) {
     await db.delete(Staff).where(eq(Staff.id, id));
 
     revalidatePath('/admin/dashboard');
+}
+
+export async function createEventForm(state: CreateEventFormState, formData: FormData) {
+    const session = await verifySession();
+
+    const validateFields = CreateEventSchema.safeParse({
+        eventName: formData.get('eventName'),
+        date: formData.get('date'),
+        time: formData.get('time'),
+        capacity: formData.get('capacity'),
+        location: formData.get('location')
+    });
+
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
+    }
+
+    const { eventName, date, time, capacity, location } = validateFields.data;
+
+    await db.insert(Event).values({
+        id: uuidv7(),
+        createdBy: session.userId,
+        eventName: eventName,
+        date: date,
+        time: time,
+        capacity: Number(capacity),
+        location: location
+    });
+
+    revalidatePath('/admin/events');
+
+    return { success: true };
 }
