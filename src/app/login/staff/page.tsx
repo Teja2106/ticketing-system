@@ -25,7 +25,7 @@ export default function AdminLogin() {
                                     {state?.message}
                                 </div>
                                 <Label className="ml-1.5 mb-2">Email</Label>
-                                <Input type="text" name="email" placeholder="user@org.com" />
+                                <Input type="text" name="email" placeholder="user@org.com" defaultValue={state?.values?.email} />
                             </div>
                             {state?.errors?.email && (<p className="ml-1.5 text-red-500">{state.errors.email}</p>)}
 

@@ -6,6 +6,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { PlusIcon } from "lucide-react";
 import CreateEvent from "./components/create-event";
 import { useState } from "react";
+import EventTabs from "./components/event-tabs";
 
 export default function AdminEvents() {
     const [open, setOpen] = useState(false);
@@ -33,6 +34,7 @@ export default function AdminEvents() {
             </div>
 
             <CreateEvent open={open} setOpen={setOpen} />
+            <EventTabs />
         </>
     )
 }

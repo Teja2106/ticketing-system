@@ -19,20 +19,35 @@ export async function adminLogin(state: LoginFormState, formData: FormData) {
 
     if (!validateFields.success) {
         return {
-            errors: validateFields.error.flatten().fieldErrors
+            errors: validateFields.error.flatten().fieldErrors,
+            values: {
+                email: formData.get('email') as string
+            }
         }
     }
 
     const { email, password } = validateFields.data;
     const admin = await db.select().from(Admin).where(eq(Admin.email, email));
 
-    if (email !== admin[0].email || !(await bcrypt.compare(password, admin[0].password))) {
+    if (!admin.length) {
         return {
             message: 'Invalid Credentials'
         }
     }
 
-    await createSession(admin[0].id, 'admin');
+    const user = admin[0];
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+        return {
+            message: 'Invalid Credentials',
+            values: {
+                email: email
+            }
+        }
+    }
+
+    await createSession(user.id, 'admin');
     
     redirect('/admin/dashboard');
 }
@@ -52,13 +67,25 @@ export async function staffLogin(state: LoginFormState, formData: FormData) {
     const { email, password } = validateFields.data;
     const staff = await db.select().from(Staff).where(eq(Staff.email, email));
 
-    if (email !== staff[0].email || !(await bcrypt.compare(password, staff[0].password))) {
+    if (!staff.length) {
         return {
             message: 'Invalid Credentials'
         }
     }
 
-    await createSession(staff[0].id, 'staff');
+    const user = staff[0];
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+        return {
+            message: 'Invalid Credentials',
+            values: {
+                email: email
+            }
+        }
+    }
+
+    await createSession(user.id, 'staff');
     redirect('/staff/dashboard');
 }
 

@@ -25,15 +25,15 @@ export default function AdminLogin() {
                                     {state?.message}
                                 </div>
                                 <Label className="ml-1.5 mb-2">Email</Label>
-                                <Input type="text" name="email" placeholder="user@org.com" />
+                                <Input type="text" name="email" placeholder="user@org.com" defaultValue={state?.values?.email} />
+                                {state?.errors?.email && (<p className="ml-1.5 text-red-500">{state.errors.email}</p>)}
                             </div>
-                            {state?.errors?.email && (<p className="ml-1.5 text-red-500">{state.errors.email}</p>)}
 
                             <div className="mt-6 mb-6">
                                 <Label className="ml-1.5 mb-2">Password</Label>
                                 <Input type="password" name="password" placeholder="******" />
+                                {state?.errors?.password && (<p className="ml-1.5 text-red-500">{state.errors.password}</p>)}
                             </div>
-                            {state?.errors?.password && (<p className="ml-1.5 text-red-500">{state.errors.password}</p>)}
 
                             <Separator className="w-full" />
                             <div className="mt-4">
