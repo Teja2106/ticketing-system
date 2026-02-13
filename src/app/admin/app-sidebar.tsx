@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader } from "@/components/ui/sidebar";
-import { CalendarClockIcon, LayoutDashboardIcon, LogOutIcon, MoreVerticalIcon, Ticket, UserCircle2Icon } from "lucide-react";
+import { Calendar, LayoutDashboardIcon, LogOutIcon, MoreVerticalIcon, Ticket, UserCircle2Icon } from "lucide-react";
 import { useUser } from "./context";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarItem href="/admin/dashboard" icon={LayoutDashboardIcon} label="Dashboard" />
-                    <SidebarItem href="/admin/events" icon={CalendarClockIcon} label="Events" />
+                    <SidebarItem href="/admin/events" icon={Calendar} label="Events" />
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>

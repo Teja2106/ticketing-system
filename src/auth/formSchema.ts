@@ -35,7 +35,7 @@ export type UpdateStaffFormState =
     }
     | undefined;
 
-export type CreateEventFormState =
+export type EventFormState =
     | {
         errors?: {
             eventName?: string[];
@@ -43,6 +43,16 @@ export type CreateEventFormState =
             time?: string[];
             capacity?: string[];
             location?: string[];
+        };
+        success?: boolean;
+    }
+    | undefined;
+
+export type CheckInLocationsState =
+    | {
+        errors?: {
+            locationName?: string[];
+            description?: string[];
         };
         success?: boolean;
     }
@@ -87,4 +97,19 @@ export const CreateEventSchema = z.object({
         message: 'Capacity must be a number.'
     }),
     location: z.string().min(1, { message: 'Location is a mandatory field.' }).max(80, { message: 'Exceeded the maximum character limit.' }).trim()
+});
+
+export const UpdateEventSchema = z.object({
+    eventName: z.string().min(1, { message: 'Event name is required.' }).max(60, { message: 'Exceeded the maximum character limit.' }).trim().optional(),
+    date: z.string().min(1, { message: 'Date is a mandatory field.' }).optional(),
+    time: z.string().min(1, { message: 'Time is a mandatory field.' }).optional(),
+    capacity: z.string().min(1, { message: 'Capacity is a mandatory field.' }).refine((val) => !isNaN(Number(val)), {
+        message: 'Capacity must be a number.'
+    }).optional(),
+    location: z.string().min(1, { message: 'Location is a mandatory field.' }).max(80, { message: 'Exceeded the maximum character limit.' }).trim().optional()
+});
+
+export const CheckInLocationsSchema = z.object({
+    locationName: z.string().min(1, { message: 'Location Name is required.' }).max(30, { message: 'Exceeded the maximum character limit.' }).trim(),
+    description: z.string().max(100, { message: 'Exceeded the maximum character limit.' }).trim().optional()
 });

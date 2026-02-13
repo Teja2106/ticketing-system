@@ -1,8 +1,8 @@
 'use server';
 
-import { AddStaffFormState, AddStaffSchema, CreateEventFormState, CreateEventSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema } from "./formSchema";
+import { AddStaffFormState, AddStaffSchema, EventFormState, CreateEventSchema, LoginFormState, LoginSchema, UpdateStaffFormState, UpdateStaffSchema, UpdateEventSchema, CheckInLocationsState, CheckInLocationsSchema } from "./formSchema";
 import { createSession, deleteSession, verifySession } from "./session";
-import { Admin, Staff, Event } from "@/db/schema";
+import { Admin, Staff, Event, CheckinLocation } from "@/db/schema";
 import { db } from "@/db";
 import bcrypt from 'bcrypt';
 import { redirect } from "next/navigation";
@@ -48,7 +48,7 @@ export async function adminLogin(state: LoginFormState, formData: FormData) {
     }
 
     await createSession(user.id, 'admin');
-    
+
     redirect('/admin/dashboard');
 }
 
@@ -169,7 +169,7 @@ export async function deleteStaff(formData: FormData) {
     revalidatePath('/admin/dashboard');
 }
 
-export async function createEventForm(state: CreateEventFormState, formData: FormData) {
+export async function createEventForm(state: EventFormState, formData: FormData) {
     const session = await verifySession();
 
     const validateFields = CreateEventSchema.safeParse({
@@ -201,4 +201,95 @@ export async function createEventForm(state: CreateEventFormState, formData: For
     revalidatePath('/admin/events');
 
     return { success: true };
+}
+
+export async function updateEventForm(state: EventFormState, formData: FormData) {
+    const id = formData.get('id') as string;
+
+    const validateFields = UpdateEventSchema.safeParse({
+        eventName: formData.get('eventName') || undefined,
+        date: formData.get('date') || undefined,
+        time: formData.get('time') || undefined,
+        capacity: formData.get('capacity') || undefined,
+        location: formData.get('location') || undefined
+    });
+
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
+    }
+
+    const data = validateFields.data;
+
+    const updateData: Record<string, unknown> = {};
+
+    if (data.eventName !== undefined) updateData.eventName = data.eventName;
+    if (data.date !== undefined) updateData.date = data.date;
+    if (data.time !== undefined) updateData.time = data.time;
+    if (data.location !== undefined) updateData.location = data.location;
+
+    if (data.capacity !== undefined) {
+        updateData.capacity = Number(data.capacity);
+    }
+
+    if (Object.keys(updateData).length === 0) return;
+
+    await db
+        .update(Event)
+        .set(updateData)
+        .where(eq(Event.id, id));
+
+    revalidatePath('/admin/events');
+
+    return { success: true };
+}
+
+export async function deleteEvent(formData: FormData) {
+    const id = formData.get('id') as string;
+    if (!id) return;
+
+    await db.delete(Event).where(eq(Event.id, id));
+
+    revalidatePath('/admin/events');
+}
+
+export async function addCheckInLocationsForms(state: CheckInLocationsState, formData: FormData) {
+    const eventId = formData.get('eventId') as string;
+
+    const validateFields = CheckInLocationsSchema.safeParse({
+        locationName: formData.get('locationName'),
+        description: formData.get('description')
+    });
+    
+    if (!validateFields.success) {
+        return {
+            errors: validateFields.error.flatten().fieldErrors
+        }
+    }
+
+    const { locationName, description } = validateFields.data;
+
+    await db.insert(CheckinLocation).values({
+        id: uuidv7(),
+        eventId: eventId,
+        locationName: locationName,
+        description: description || null
+    });
+
+    revalidatePath('/admin/events');
+
+    return { success: true }
+}
+
+export async function deleteCheckInLocations(formData: FormData) {
+    const id = formData.get('id') as string;
+
+    if (!id) return;
+
+    await db
+        .delete(CheckinLocation)
+        .where(eq(CheckinLocation.id, id));
+
+    revalidatePath('/admin/events');
 }

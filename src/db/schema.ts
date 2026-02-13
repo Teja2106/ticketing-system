@@ -28,3 +28,10 @@ export const Event = pgTable('events', {
     location: text('location').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+export const CheckinLocation = pgTable('check_in_location',{
+    id: uuid('id').primaryKey(),
+    eventId: uuid('event_id').references(() => Event.id, { onDelete: 'cascade' }).notNull(),
+    locationName: text('location_name').notNull(),
+    description: text('description')
+});

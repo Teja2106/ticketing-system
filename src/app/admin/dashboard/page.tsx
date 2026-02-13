@@ -22,7 +22,7 @@ export default function AdminDashboard() {
                 <TicketCounter />
             </div>
 
-            <div className="">
+            <div>
                 <AddSatff />
             </div>
         </>
